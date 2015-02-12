@@ -3,11 +3,15 @@
 
 
 {% block maincontent %}
-  <h1>Blue Force Tracker</h1>
+<h1>Blue Force Tracker</h1>
 
 <button onclick="GetData()" type="button" class="btn btn-danger">Action</button>
 
      <div class="location"></div>
+
+
+    <div id="map-canvas"></div>
+
 
 {% endblock %}
 
@@ -15,6 +19,7 @@
   {{super()}}
 
     <script type="application/javascript">
+    var map;
 
     function GetData() {
         $( ".location").empty();
@@ -30,6 +35,20 @@
                 for (user in data ){
 
                     $( ".location" ).append( "<p>" + data[user][0]['user']['S'] + " Location:" + data[user][0]['lat']['N']  + "  X  " + data[user][0]['log']['N'] + "</p>" );
+                        // To add the marker to the map, use the 'map' property
+                    var myLatlng = new google.maps.LatLng(data[user][0]['lat']['N'],data[user][0]['log']['N']);
+
+                    var markername = data[user][0]['user']['S'] + "marker";
+
+
+                    console.log(myLatlng);
+                    var eval(markername) = new google.maps.Marker({
+                        position: myLatlng,
+                        map: map,
+                        title: data[user][0]['user']['S']
+                    });
+                    marker.setMap(map);
+
                 }
 
             },
@@ -41,6 +60,31 @@
             }
         });
     }
+
+
+function initialize() {
+  var mapOptions = {
+    zoom: 8,
+    center: new google.maps.LatLng(33.0593366, -83.9626457)
+  };
+
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+}
+
+
+function loadScript() {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaj3O8v3HR2ZmDxQClYaiQ0JnhWg8gPKQ&v=3.exp&' +
+      'callback=initialize';
+  document.body.appendChild(script);
+}
+
+window.onload = loadScript;
+
+
+
     </script>
 
 

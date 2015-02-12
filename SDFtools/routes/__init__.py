@@ -122,13 +122,22 @@ def help():
 @groups_required(['approved'])
 def missionsroot():
     data = missions.getallmissions()
-    return render_template('missions.html', data=data)
+    urls = []
+    for item in data:
+        #print "##################SAD TESTINGS#############################"
+        #print item['SAD_ID']
+        url = missions.getmissionurl(item['SAD_ID'])
+        #print url
+        urls.append(url)
+
+    print urls
+    return render_template('missions.html', data=data, urls=urls)
 
 """ BluTrac """
 
 @gui.route('/blutrac')
 @menu.register_menu(gui, 'blutrac', 'Troop Tracker')
-@groups_required(['approved'])
+@groups_required(['5BDE HQ'])
 def trackerroot():
     #data = missions.getallmissions()
     return render_template('blutrac.html')
@@ -166,7 +175,7 @@ class Location(restful.Resource):
 #   shows a list of all todos, and lets you POST to add new tasks
 class LocationList(Resource):
     def get(self):
-        users = {'tes4974', 'hat6974'}
+        users = {'hat6974'}
         data = blutrac.getallusers(users)
         print data
         return data

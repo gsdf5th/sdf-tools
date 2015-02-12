@@ -8,5 +8,11 @@ def setuserwx(station):
     user.save()
 
 def getuserwxstation():
-    return user.custom_data['wx']
+    print "ERROR ERROR ERROR ERROR"
+    try:
+        response = user.custom_data['wx']
+    except:
+        setuserwx('KMCN')
+        response = user.custom_data['wx']
+    return response
 

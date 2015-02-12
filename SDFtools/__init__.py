@@ -8,7 +8,7 @@ from os.path import expanduser
 from flask.ext.stormpath import StormpathManager
 from flask.ext import menu
 from os import environ
-from SDFtools import weather
+
 from flask.ext.cors import CORS
 
 import ast
@@ -20,7 +20,8 @@ from flask.ext.cache import Cache
 from routes import gui
 from cache import cache
 from SDFtools.api import api
-
+from SDFtools import weather
+from SDFtools import gmaps
 
 
 
@@ -42,11 +43,16 @@ app.config['STORMPATH_API_KEY_ID'] = environ.get('STORMPATH_API_KEY_ID')
 app.config['STORMPATH_API_KEY_SECRET'] = environ.get('STORMPATH_API_KEY_SECRET')
 
 app.config['STORMPATH_APPLICATION'] = 'gsdf5th'
-#app.config['STORMPATH_ENABLE_GOOGLE'] = True
-#app.config['STORMPATH_SOCIAL'] = ast.literal_eval(environ.get('STROMPATH-SOCIAL'))
+app.config['STORMPATH_ENABLE_GOOGLE'] = True
+app.config['STORMPATH_SOCIAL'] = {
+    'GOOGLE': {
+        'client_id': environ.get('GOOGLE_CLIENT_ID'),
+        'client_secret': environ.get('GOOGLE_CLIENT_SECRET'),
+    }
+}
 
 
-app.config['STORMPATH_LOGIN_TEMPLATE'] = 'login.html'
+#app.config['STORMPATH_LOGIN_TEMPLATE'] = 'login.html'
 
 stormpath_manager = StormpathManager(app)
 menu.Menu(app=app)
@@ -57,6 +63,8 @@ cors = CORS(app)
 
 
 weather.Weather(app=app)
+gmaps.Gmap(app=app)
+
 
 
 
